@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTimeDisplay = document.getElementById('saved-time');
     const gpsInfoContainer = document.getElementById('gps-info');
     const savedAddressDisplay = document.getElementById('saved-address');
-    const savedCoordsDisplay = document.getElementById('saved-coords');
     const photoContainer = document.getElementById('photo-container');
     const savedPhoto = document.getElementById('saved-photo');
 
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (savedData.gps) {
                 savedAddressDisplay.textContent = savedData.gps.address || '주소 정보 없음';
-                savedCoordsDisplay.textContent = `위도: ${savedData.gps.lat.toFixed(5)}, 경도: ${savedData.gps.lng.toFixed(5)}`;
                 gpsInfoContainer.style.display = 'block';
 
                 const mapEl = document.getElementById('map');
@@ -106,9 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveAllData(newData, btnElement, originalText, successText) {
         const currentData = JSON.parse(localStorage.getItem('parkingData')) || {};
+        
+        // 새로운 주차 위치를 저장할 때 새 사진이 없다면 이전 사진 데이터 삭제 (용량 확보 및 갱신)
+        if (newData.zone && !newData.photo) {
+            delete currentData.photo;
+        }
+
         const mergedData = { ...currentData, ...newData, timestamp: getFormattedTime() };
         
         try {
+            localStorage.removeItem('parkingData'); // 공간 선확보
             localStorage.setItem('parkingData', JSON.stringify(mergedData));
             loadSavedData();
             
@@ -198,8 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const img = new Image();
                 img.onload = function () {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 800;
+                    const MAX_WIDTH = 600;
+                    const MAX_HEIGHT = 600;
                     let width = img.width;
                     let height = img.height;
 
@@ -220,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
 
                     handleSaveWithGPS({ photo: compressedBase64 }, cameraLabel, originalCameraText, '사진 저장 완료!');
                 };
