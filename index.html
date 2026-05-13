@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>주차장 위치 저장</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>흰둥이 어디갔니?</h1>
+        </header>
+
+        <section class="card saved-info-card">
+            <h2>최근 저장된 위치</h2>
+            <div id="saved-location" class="location-display">- -</div>
+            <div class="time-display" id="saved-time">기록이 없습니다.</div>
+
+            <div class="gps-info" id="gps-info" style="display: none;">
+                <div class="address-display" id="saved-address"></div>
+                <div class="coords-display" id="saved-coords"></div>
+            </div>
+
+            <div class="photo-container" id="photo-container" style="display: none;">
+                <img id="saved-photo" src="" alt="주차 사진">
+            </div>
+        </section>
+
+        <section class="card action-card">
+            <h2>새로운 위치 저장</h2>
+            <div class="input-group">
+                <div class="select-wrapper">
+                    <select id="zone-select">
+                        <!-- A to Z populated by JS -->
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" id="slot-input" placeholder="00" min="0" max="99" maxlength="2">
+                </div>
+            </div>
+            <button id="save-location-btn" class="primary-btn">위치 저장하기</button>
+
+            <div class="divider">또는</div>
+
+            <label for="camera-input" class="camera-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                <span>사진 찍어서 저장</span>
+            </label>
+            <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+        </section>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
